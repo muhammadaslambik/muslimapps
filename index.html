@@ -38,7 +38,7 @@ a.l{display:block;padding:8px 0;border-bottom:1px solid var(--bd);text-decoratio
 .ai{font-family:'Amiri','Traditional Arabic',serif;font-size:1.3em}</style></head><body>
 <div class="hd"><div><h1>🕌 Muslim Apps</h1><p>Mendekatkan Diri kepada Allah</p></div><div><button class="ib" id="sp" title="Suara adzan">🔊</button><button class="ib" id="th" title="Gelap/terang">🌓</button></div></div>
 <main id="m"></main>
-<script src="quran_id.js"></script><script src="quran_en.js"></script>
+<script src="quran-data.js"></script><script src="quran_id.js"></script><script src="quran_en.js"></script>
 <script>
 const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),rad=Math.PI/180;
 const CITIES={Semarang:[-6.9667,110.4167],Surakarta:[-7.5666,110.8283],Yogyakarta:[-7.7956,110.3695],Jakarta:[-6.2088,106.8456],Bandung:[-6.9175,107.6191],Surabaya:[-7.2575,112.7521],Medan:[3.5952,98.6722],Makassar:[-5.1477,119.4327],Denpasar:[-8.6705,115.2126]};
@@ -165,7 +165,7 @@ let SR=0,LG='id';
 const QB='بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ',QU=(n,l)=>`https://cdn.jsdelivr.net/npm/quran-json@3.1.2/dist/chapters/${l}/${n}.json`;
 async function loadS(n,l){const D=window[l==='en'?'QEN':'QID'];if(D){const c=Array.isArray(D)?D.find(x=>x.id===n):D[n];if(c)return c}const u=QU(n,l);let r;try{const c=await caches.open('qj1');r=await c.match(u);if(!r){r=await fetch(u);if(!r.ok)throw 0;await c.put(u,r.clone())}}catch(e){if(!r||!r.ok){r=await fetch(u);if(!r.ok)throw 0}}return r.json()}
 const langBar=()=>`<div class="row" style="justify-content:center;gap:6px;margin:8px 0">${[['ar','Tanpa terjemah'],['id','Indonesia'],['en','English']].map(([k,t])=>`<button class="bt" data-lg="${k}" style="${LG===k?'':'background:var(--sf);color:var(--tx)'}">${t}</button>`).join('')}</div>`;
-const quranList=()=>langBar()+`<p style="text-align:center"><button class="bt" data-sv="1">⬇ Simpan semua untuk offline</button></p><div id="sv" style="text-align:center"><small></small></div>`+S.map((n,i)=>`<div class="r" style="cursor:pointer" data-sr="${i+1}"><span>${i+1}. ${n}</span><span>›</span></div>`).join('');
+const quranList0=()=>langBar()+`<p style="text-align:center"><button class="bt" data-sv="1">⬇ Simpan semua untuk offline</button></p><div id="sv" style="text-align:center"><small></small></div>`+S.map((n,i)=>`<div class="r" style="cursor:pointer" data-sr="${i+1}"><span>${i+1}. ${n}</span><span>›</span></div>`).join('');
 function reader(){const n=SR,l=LG==='en'?'en':'id';
  loadS(n,l).then(d=>{const el=$('#rd');if(!el||SR!==n)return;el.innerHTML=`<div class="c" style="text-align:center"><div class="ar" style="text-align:center;font-size:32px">${d.name}</div><b>${n}. ${d.transliteration}</b> · ${d.translation||''}<br><small>${d.total_verses} ayat · ${d.type==='meccan'?'Makkiyah':'Madaniyah'}</small></div>`+(n!==1&&n!==9?`<div class="ar" style="text-align:center">${QB}</div>`:'')+d.verses.map(v=>`<div class="c"><div class="ar">${v.text} <small style="font-size:14px">﴿${v.id}﴾</small></div>${LG==='ar'?'':`<div style="margin-top:6px">${v.translation}</div>`}</div>`).join('')}).catch(()=>{const el=$('#rd');if(el)el.innerHTML='<div class="c">Data belum bisa dimuat. Pasang file quran_id.js dan quran_en.js di folder yang sama dengan file aplikasi (lihat panduan), atau pastikan internet aktif.</div>'});
  return`<button class="bk" data-sr="0">← Daftar surat</button>${langBar()}<div id="rd" class="c">Memuat…</div><small style="color:var(--mu)">Sumber teks: quran-json (CC-BY-SA 4.0), teks Uthmani dari The Noble Qur'an Encyclopedia. Terjemah Indonesia: Kemenag RI; Inggris: Saheeh International (Tanzil.net).</small>`}
@@ -180,9 +180,28 @@ function khutbah(){const T=KH.flatMap(k=>k[1].split('|'));
  if(KD>=0){const A=(h,t)=>`<h3 style="color:var(--ac);margin:14px 0 4px">${h}</h3><div class="ar">${t}</div>`;
   return`<button class="bk" data-kd="-1">← Daftar tema</button><div class="c"><h3 style="margin:0">${KD+1}. ${T[KD]}</h3>${A('Khutbah Pertama: pembukaan, wasiat takwa, dan ayat',AR1)}<h3 style="color:var(--ac);margin:14px 0 4px">Isi khutbah</h3><p>${ISI[KD]||'<i>Isi khutbah untuk tema ini belum ditulis.</i>'}</p>${A('Penutup khutbah pertama',AR1E)}${A('Doa saat duduk di antara dua khutbah',ARM)}${A('Khutbah Kedua, shalawat, dan doa penutup',AR2)}<small style="color:var(--mu)">Teks Arab adalah rangkaian baku khutbah yang lazim dipakai. Mohon diperiksa takmir/ustadz sebelum dipakai.</small></div>`}
  let n=0;return`<div class="c"><small>Ketuk judul untuk membuka khutbah. Rangkaian Arab (pembuka, doa tengah, doa penutup) tersedia untuk semua tema; isi khutbah lengkap baru tersedia untuk tema 1.</small></div>`+KH.map(k=>`<details><summary>${k[0]}</summary><div>${k[1].split('|').map(t=>`<div class="r" style="cursor:pointer" data-kd="${n}"><span>${++n}. ${t}</span><span>›</span></div>`).join('')}</div></details>`).join('')}
-document.addEventListener('click',e=>{const t=e.target.closest('[data-cm],[data-cn],[data-q],[data-kd],[data-sr],[data-lg],[data-sv]');if(!t)return;const D=t.dataset;
+document.addEventListener('click',e=>{const t=e.target.closest('[data-cm],[data-cn],[data-q],[data-kd],[data-sr],[data-lg],[data-sv],[data-md],[data-pg]');if(!t)return;const D=t.dataset;
  if(D.cm){CAL.mode=D.cm;draw()}else if(D.cn!=null){const n=+D.cn;if(n===0)CAL.a=new Date();else if(CAL.mode==='masehi')CAL.a=new Date(CAL.a.getFullYear(),CAL.a.getMonth()+n,1);else{const s=CAL.s;CAL.a=n>0?new Date(s.getFullYear(),s.getMonth(),s.getDate()+CAL.n):new Date(s.getFullYear(),s.getMonth(),s.getDate()-1)}draw()}
- else if(D.q){QM=D.q;draw()}else if(D.sr!=null){SR=+D.sr;scrollTo(0,0);draw()}else if(D.lg){LG=D.lg;draw()}else if(D.sv)saveAll();else if(D.kd!=null){KD=+D.kd;scrollTo(0,0);draw()}});
+ else if(D.q){QM=D.q;draw()}else if(D.sr!=null){SR=+D.sr;scrollTo(0,0);draw()}else if(D.lg){LG=D.lg;draw()}else if(D.md){MD=D.md;draw()}else if(D.pg){PG=Math.min(604,Math.max(1,PG+ +D.pg));draw()}else if(D.sv)saveAll();else if(D.kd!=null){KD=+D.kd;scrollTo(0,0);draw()}});
+
+let MD='surat',PG=1;
+const PGS=(()=>{try{return (window.QuranData||QuranData).Page.filter(x=>x&&x[0]>0)}catch(e){return null}})();
+const JZS=(()=>{try{return (window.QuranData||QuranData).Juz.filter(x=>x&&x[0]>0)}catch(e){return null}})();
+const modeBar=()=>`<div class="row" style="justify-content:center;gap:6px;margin:6px 0">${[['surat','Per Surat'],['halaman','Per Halaman']].map(([k,t])=>`<button class="bt" data-md="${k}" style="${MD===k?'':'background:var(--sf);color:var(--tx)'}">${t}</button>`).join('')}</div>`;
+const quranList=()=>modeBar()+(MD==='halaman'?pageUI():quranList0());
+function pageUI(){if(!PGS||PGS.length<604)return'<div class="c">Mode halaman butuh file <b>quran-data.js</b> (dari Tanzil) di folder yang sama dengan aplikasi. Lihat panduan.</div>';
+ const key=a=>a[0]*1000+a[1],jp=j=>{let p=1;PGS.forEach((s,i)=>{if(key(s)<=key(JZS[j]))p=i+1});return p};
+ setTimeout(pageLoad,0);
+ return langBar()+`<div class="row" style="margin:8px 0"><button class="bt" data-pg="-1">‹ Sebelumnya</button><span>Hal. <input id="pgn" type="number" min="1" max="604" value="${PG}" style="width:70px;font:inherit;padding:6px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx)"></span><button class="bt" data-pg="1">Berikutnya ›</button></div>`+(JZS&&JZS.length>=30?`<div style="text-align:center;margin-bottom:8px">Lompat ke <select id="jz"><option value="">pilih juz…</option>${Array.from({length:30},(_,j)=>`<option value="${jp(j)}">Juz ${j+1} (hal. ${jp(j)})</option>`).join('')}</select></div>`:'')+'<div id="pgv" class="c">Memuat…</div>'}
+async function pageLoad(){const p=PG,l=LG==='en'?'en':'id',a=PGS[p-1],b=PGS[p]||[115,1],last=b[1]===1?b[0]-1:b[0];let out='',tr='';
+ try{for(let n=a[0];n<=last;n++){const d=await loadS(n,l),from=n===a[0]?a[1]:1,to=n===b[0]?b[1]-1:d.total_verses,vs=d.verses.filter(v=>v.id>=from&&v.id<=to);
+  if(from===1)out+=`<div class="ar" style="text-align:center;font-size:28px">${d.name}</div>`+(n!==1&&n!==9?`<div class="ar" style="text-align:center">${QB}</div>`:'');
+  out+=vs.map(v=>`${v.text} ﴿${v.id}﴾`).join(' ')+' ';
+  if(LG!=='ar')tr+=vs.map(v=>`<div class="r" style="display:block"><b>${d.transliteration} : ${v.id}</b> — ${v.translation}</div>`).join('')}
+  const el=$('#pgv');if(!el||PG!==p)return;
+  el.innerHTML=`<div style="text-align:center"><b>Halaman ${p}</b> dari 604</div><div class="ar" style="text-align:justify;text-align-last:center">${out}</div>`+(tr?`<hr style="border:0;border-top:1px solid var(--bd)"><b>Terjemah</b>${tr}`:'')+'<p><small style="color:var(--mu)">Susunan halaman mengikuti Mushaf Madinah (604 halaman). Bukan salinan tata letak baris Mushaf Pojok.</small></p>'
+ }catch(e){const el=$('#pgv');if(el)el.innerHTML='Data belum bisa dimuat. Pasang quran_id.js / quran_en.js di folder aplikasi.'}}
+document.addEventListener('change',e=>{if(e.target.id==='pgn'){PG=Math.min(604,Math.max(1,+e.target.value||1));draw()}else if(e.target.id==='jz'&&e.target.value){PG=+e.target.value;draw()}});
 const V={adzan,kiblat,doa,kal,quran:()=>SR?reader():quran(),khutbah};
 function draw(){const m=$('#m');m.innerHTML=page==='home'?home():`<button class="bk" data-p="home">← Kembali</button><h2 style="margin:4px 0">${TILES.find(x=>x[0]===page)[2]}</h2>`+V[page]();$('#sp').textContent=snd?'🔊':'🔇'}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-p],[data-s],[data-k],#g,#tt,#cp,#sp,#th');if(!t)return;
