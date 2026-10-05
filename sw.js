@@ -1,4 +1,4 @@
-const V = 'muslimapps-v3';
+const V = 'muslimapps-v4';
 const FILES = ['./', './index.html', './manifest.json', './quran-data.js', './quran_id.js', './quran_en.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
