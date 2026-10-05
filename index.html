@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Muslim Apps">
 
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Scheherazade+New&family=Noto+Naskh+Arabic&family=Lateef&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#f4f7f5;--cd:#fff;--tx:#12302a;--mu:#5d746d;--ac:#0f6b57;--sf:#e6f2ed;--bd:#dce8e3;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1513;--cd:#13231f;--tx:#e4f1ed;--mu:#8fa8a0;--ac:#35d0b0;--sf:#1a2f2a;--bd:#25403a}}
@@ -35,9 +36,23 @@ a.l{display:block;padding:8px 0;border-bottom:1px solid var(--bd);text-decoratio
 .bk{background:none;border:0;color:var(--ac);font:inherit;font-weight:700;padding:4px 0}
 #dl{transform-origin:100px 100px;transition:transform .15s linear}
 @media(min-width:900px){body{font-size:17px}.hd{padding:26px max(16px,calc((100% - 1040px)/2)) 70px}.hd h1{font-size:30px}main{max-width:1040px}main:has(.tl){display:grid;grid-template-columns:1fr 1fr;gap:12px}main:has(.tl)>*{margin:0}main:has(.tl)>.tl{grid-column:1/-1;grid-template-columns:repeat(6,1fr);gap:12px}.tl button{padding:18px 6px}.g div{padding:10px 0}.g small{font-size:11px}svg[viewBox="0 0 200 200"]{width:340px!important}}
-.ai{font-family:'Amiri','Traditional Arabic',serif;font-size:1.3em}</style></head><body>
-<div class="hd"><div><h1>🕌 Muslim Apps</h1><p>Mendekatkan Diri kepada Allah</p></div><div><button class="ib" id="sp" title="Suara adzan">🔊</button><button class="ib" id="th" title="Gelap/terang">🌓</button></div></div>
+.ai{font-family:'Amiri','Traditional Arabic',serif;font-size:1.3em}:root{--pc:#0f6b57;--af:'Amiri Quran'}
+:root{--ac:var(--pc)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--ac:color-mix(in srgb,var(--pc) 55%,white)}}
+:root[data-theme="dark"]{--ac:color-mix(in srgb,var(--pc) 55%,white)}
+.hd{background:linear-gradient(160deg,color-mix(in srgb,var(--pc) 75%,black),var(--pc) 60%,#c9a24a)}
+.ar,.ai{font-family:var(--af),'Amiri','Traditional Arabic',serif!important}
+.ft{text-align:center;color:var(--mu);font-size:13px;padding:18px 0 8px}
+.sl{display:grid;grid-template-columns:1fr;gap:6px;max-height:55vh;overflow-y:auto}
+.sl button{font:inherit;text-align:left;padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--cd);color:var(--tx)}
+#bn{display:none}
+@media(min-width:600px){.sl{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.sl{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:767px){#bn{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:9;background:var(--cd);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}#bn button{flex:1;border:0;background:none;color:var(--mu);font-size:10px;padding:6px 0}#bn button.on{color:var(--ac);font-weight:700}#bn i{display:block;font-size:20px;font-style:normal}.dk{display:none}body{padding-bottom:72px}}
+</style></head><body>
+<div class="hd"><div><h1>🕌 Muslim Apps</h1><p>Mendekatkan Diri kepada Allah</p></div><div><button class="ib" id="sp" title="Suara adzan">🔊</button><button class="ib" id="th" title="Gelap/terang">🌓</button><label class="ib" title="Warna tema" style="display:inline-flex;align-items:center;justify-content:center;position:relative;margin-left:6px">🎨<input type="color" id="cl" value="#0f6b57" style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer"></label></div></div>
 <main id="m"></main>
+<nav id="bn"></nav>
 <script src="quran-data.js"></script><script src="quran_id.js"></script><script src="quran_en.js"></script>
 <script>
 const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),rad=Math.PI/180;
@@ -202,10 +217,45 @@ async function pageLoad(){const p=PG,l=LG==='en'?'en':'id',a=PGS[p-1],b=PGS[p]||
   el.innerHTML=`<div style="text-align:center"><b>Halaman ${p}</b> dari 604</div><div class="ar" style="text-align:justify;text-align-last:center">${out}</div>`+(tr?`<hr style="border:0;border-top:1px solid var(--bd)"><b>Terjemah</b>${tr}`:'')+'<p><small style="color:var(--mu)">Susunan halaman mengikuti Mushaf Madinah (604 halaman). Bukan salinan tata letak baris Mushaf Pojok.</small></p>'
  }catch(e){const el=$('#pgv');if(el)el.innerHTML='Data belum bisa dimuat. Pasang quran_id.js / quran_en.js di folder aplikasi.'}}
 document.addEventListener('change',e=>{if(e.target.id==='pgn'){PG=Math.min(604,Math.max(1,+e.target.value||1));draw()}else if(e.target.id==='jz'&&e.target.value){PG=+e.target.value;draw()}});
-const V={adzan,kiblat,doa,kal,quran:()=>SR?reader():quran(),khutbah};
-function draw(){const m=$('#m');m.innerHTML=page==='home'?home():`<button class="bk" data-p="home">← Kembali</button><h2 style="margin:4px 0">${TILES.find(x=>x[0]===page)[2]}</h2>`+V[page]();$('#sp').textContent=snd?'🔊':'🔇'}
+
+const FONTS=[['Amiri Quran','Amiri Quran'],['Scheherazade New','Scheherazade New'],['Noto Naskh Arabic','Noto Naskh Arabic'],['Lateef','Lateef'],['Noto Nastaliq Urdu','Gaya Indo-Pak (Nastaliq)']];
+let QT='dig',QP=null,QMODE='ayat',AF='Amiri Quran';
+function setPC(c){document.documentElement.style.setProperty('--pc',c);const m=document.querySelector('meta[name=theme-color]');if(m)m.content=c}
+const setAF=f=>document.documentElement.style.setProperty('--af',`'${f}'`);
+const sv2=()=>{try{localStorage.setItem('qlg',LG);localStorage.setItem('qmd',QMODE);localStorage.setItem('af',AF)}catch(e){}};
+try{const c=localStorage.getItem('pc');if(c){setPC(c);$('#cl').value=c}LG=localStorage.getItem('qlg')||LG;QMODE=localStorage.getItem('qmd')||QMODE;AF=localStorage.getItem('af')||AF}catch(e){}
+setAF(AF);$('#cl').addEventListener('input',e=>{setPC(e.target.value);try{localStorage.setItem('pc',e.target.value)}catch(x){}});
+const qOpt=(a,v,on,t,st='')=>`<button class="bt" ${a}="${v}" style="${on?'':'background:var(--sf);color:var(--tx);'}${st}">${t}</button>`;
+const pgOf=n=>{let q=1;PGS.forEach((t,i)=>{if(t[0]*1000+t[1]<=n*1000+1)q=i+1});return q};
+function QX(){const tabs=`<div class="row" style="justify-content:center;gap:8px;margin:8px 0">${qOpt('data-qt','dig',QT==='dig','Al-Quran Digital')}${qOpt('data-qt','poj',QT==='poj','Al-Quran Pojok')}</div>`;
+ if(QT==='poj')return tabs+`<div class="c"><b>Al-Quran Pojok</b><p><small>Tampilan Pojok asli belum tersedia karena persoalan lisensi. Sementara, mushaf per halaman dan per juz dibuka lewat Quran.com (butuh internet).</small></p><div class="sl"><button onclick="window.open('https://quran.com/page/1','_blank')">Mushaf per halaman</button>${Array.from({length:30},(_,i)=>`<button onclick="window.open('https://quran.com/juz/${i+1}','_blank')">Juz ${i+1}</button>`).join('')}</div></div>`;
+ if(!PGS||PGS.length<604)return tabs+'<div class="c">Pasang file <b>quran-data.js</b> (dari Tanzil), <b>quran_id.js</b>, dan <b>quran_en.js</b> di folder yang sama dengan aplikasi.</div>';
+ const key=a=>a[0]*1000+a[1],jp=j=>{let p=1;PGS.forEach((s,i)=>{if(key(s)<=key(JZS[j]))p=i+1});return p};
+ const bar=`<div class="row" style="gap:6px;justify-content:center;flex-wrap:wrap">${[['surat','Surat'],['terj','Terjemah'],['mode','Mode'],['font','Font']].map(([k,t])=>qOpt('data-qp',k,QP===k,t)).join('')}</div>`;
+ let m='';
+ if(QP==='surat')m=`<div class="c sl">${S.map((n,i)=>`<button data-gs="${i+1}">${i+1}. ${n}</button>`).join('')}</div>`;
+ if(QP==='terj')m=`<div class="c row" style="justify-content:center;gap:6px;flex-wrap:wrap">${[['ar','Tanpa terjemah'],['id','Indonesia'],['en','English']].map(([k,t])=>qOpt('data-ql',k,LG===k,t)).join('')}</div>`;
+ if(QP==='mode')m=`<div class="c row" style="justify-content:center;gap:6px;flex-wrap:wrap">${[['ayat','Terjemah per ayat'],['bawah','Terjemah di bawah']].map(([k,t])=>qOpt('data-qm',k,QMODE===k,t)).join('')}</div>`;
+ if(QP==='font')m=`<div class="c row" style="justify-content:center;gap:6px;flex-wrap:wrap">${FONTS.map(([k,t])=>qOpt('data-qf',k,AF===k,t,`font-family:'${k}',serif;font-size:17px`)).join('')}</div><small style="color:var(--mu)">Semua font berlisensi OFL (Google Fonts). Font KFGQPC dan LPMQ Kemenag belum disertakan.</small>`;
+ setTimeout(pageLoad2,0);
+ return tabs+bar+m+`<div class="row" style="margin:10px 0"><button class="bt" data-pg="-1">‹</button><span>Hal. <input id="pgn" type="number" min="1" max="604" value="${PG}" style="width:64px;font:inherit;padding:6px;border-radius:8px;border:1px solid var(--bd);background:var(--sf);color:var(--tx)"> / 604</span>${JZS&&JZS.length>=30?`<select id="jz"><option value="">Juz…</option>${Array.from({length:30},(_,j)=>`<option value="${jp(j)}">Juz ${j+1}</option>`).join('')}</select>`:''}<button class="bt" data-pg="1">›</button></div><div id="pgv" class="c">Memuat…</div><p style="text-align:center"><button class="bt" data-pg="1">Halaman berikutnya ›</button></p>`}
+async function pageLoad2(){const p=PG,l=LG==='en'?'en':'id',a=PGS[p-1],b=PGS[p]||[115,1],last=b[1]===1?b[0]-1:b[0];let ar='',tr='',ay='';
+ try{for(let n=a[0];n<=last;n++){const d=await loadS(n,l),from=n===a[0]?a[1]:1,to=n===b[0]?b[1]-1:d.total_verses,vs=d.verses.filter(v=>v.id>=from&&v.id<=to),hd=from===1?`<div class="ar" style="text-align:center;font-size:1.2em">${d.name}</div>`+(n!==1&&n!==9?`<div class="ar" style="text-align:center">${QB}</div>`:''):'';
+  ar+=hd;ay+=hd;ar+=vs.map(v=>`${v.text} ﴿${v.id}﴾`).join(' ')+' ';
+  ay+=vs.map(v=>`<div style="padding:8px 0;border-bottom:1px solid var(--bd)"><div class="ar">${v.text} ﴿${v.id}﴾</div>${LG==='ar'?'':`<div style="color:var(--mu)">${v.translation}</div>`}</div>`).join('');
+  if(LG!=='ar')tr+=vs.map(v=>`<div style="padding:4px 0"><b>${d.transliteration} : ${v.id}</b> — ${v.translation}</div>`).join('')}
+  const el=$('#pgv');if(!el||PG!==p)return;
+  el.innerHTML=`<div style="text-align:center"><b>Halaman ${p}</b></div>`+(QMODE==='ayat'?ay:`<div class="ar" style="text-align:justify;text-align-last:center">${ar}</div>`+(tr?`<hr style="border:0;border-top:1px solid var(--bd)"><b>Terjemah</b>${tr}`:''))+'<p><small style="color:var(--mu)">Susunan halaman mengikuti Mushaf Madinah (604 halaman), bukan tata letak baris Mushaf Pojok. Sumber teks: Tanzil.net.</small></p>'
+ }catch(e){const el=$('#pgv');if(el)el.innerHTML='Data belum bisa dimuat. Pasang quran_id.js dan quran_en.js di folder aplikasi.'}}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-qt],[data-qp],[data-gs],[data-ql],[data-qm],[data-qf]');if(!t)return;const D=t.dataset;
+ if(D.qt){QT=D.qt;QP=null}else if(D.qp)QP=QP===D.qp?null:D.qp;else if(D.gs){PG=pgOf(+D.gs);QP=null;scrollTo(0,0)}else if(D.ql){LG=D.ql;sv2()}else if(D.qm){QMODE=D.qm;sv2()}else if(D.qf){AF=D.qf;setAF(AF);sv2()}
+ draw()});
+const NAV=[['home','🏠','Beranda'],['adzan','🕌','Adzan'],['kiblat','🧭','Kiblat'],['doa','🤲','Doa'],['kal','📅','Kalender'],['quran','📖','Quran'],['khutbah','🕋','Khutbah']];
+const navDraw=()=>{$('#bn').innerHTML=NAV.map(x=>`<button data-p="${x[0]}" class="${x[0]===page?'on':''}"><i>${x[1]}</i>${x[2]}</button>`).join('')};
+const V={adzan,kiblat,doa,kal,quran:QX,khutbah};
+function draw(){const m=$('#m');m.innerHTML=page==='home'?home():`<button class="bk dk" data-p="home">← Kembali</button><h2 style="margin:4px 0">${TILES.find(x=>x[0]===page)[2]}</h2>`+V[page]();m.insertAdjacentHTML('beforeend','<div class="ft">Dibuat oleh Muhammad Aslambik, S.Hum.</div>');navDraw();$('#sp').textContent=snd?'🔊':'🔇'}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-p],[data-s],[data-k],#g,#tt,#cp,#sp,#th');if(!t)return;
- if(t.dataset.p){page=t.dataset.p;scrollTo(0,0);draw()}else if(t.dataset.s)speak(+t.dataset.s);else if(t.dataset.k){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.dataset.k);u.lang='id-ID';speechSynthesis.speak(u)}catch(x){}}
+ if(t.dataset.p){page=t.dataset.p;KD=-1;QP=null;scrollTo(0,0);draw()}else if(t.dataset.s)speak(+t.dataset.s);else if(t.dataset.k){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t.dataset.k);u.lang='id-ID';speechSynthesis.speak(u)}catch(x){}}
  else if(t.id==='g')gps(draw);else if(t.id==='tt')beep();else if(t.id==='cp')startCompass();
  else if(t.id==='sp'){snd=!snd;save();if(snd)try{Notification.requestPermission()}catch(x){}draw()}
  else if(t.id==='th'){const r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=d?'light':'dark';try{localStorage.setItem('th',r.dataset.theme)}catch(x){}}});
