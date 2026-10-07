@@ -1,4 +1,4 @@
-const V = 'muslimapps-v5';
+const V = 'muslimapps-v6';
 const FILES = ['./', './index.html', './manifest.json', './quran-data.js', './adzan.mp3', './adzan-subuh.mp3', './quran_id.js', './quran_en.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
