@@ -9,3 +9,4 @@ Buka `index.html` di browser, atau pasang di GitHub Pages. Letakkan `quran-data.
 - Teks Al-Quran dan terjemahan: [quran-json](https://github.com/risan/quran-json), lisensi CC-BY-SA 4.0. Teks Uthmani dari The Noble Qur'an Encyclopedia; terjemah Indonesia Kemenag RI; terjemah Inggris Saheeh International (Tanzil.net).
 - Jadwal salat dihitung lokal (metode Kemenag: Subuh 20°, Isya 18°). Kalender Hijriyah memakai Umm al-Qura.
 - Pembagian halaman (mode Per Halaman): metadata Tanzil.net (quran-data.js), mengikuti Mushaf Madinah 604 halaman. Sumber: https://tanzil.net
+- Suara adzan: letakkan `adzan.mp3` (dan `adzan-subuh.mp3`) di folder yang sama dengan `index.html`. Pastikan Anda berhak memakai rekaman tersebut.

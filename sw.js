@@ -1,5 +1,5 @@
-const V = 'muslimapps-v4';
-const FILES = ['./', './index.html', './manifest.json', './quran-data.js', './quran_id.js', './quran_en.js', './icons/icon-192.png', './icons/icon-512.png'];
+const V = 'muslimapps-v5';
+const FILES = ['./', './index.html', './manifest.json', './quran-data.js', './adzan.mp3', './adzan-subuh.mp3', './quran_id.js', './quran_en.js', './icons/icon-192.png', './icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(
